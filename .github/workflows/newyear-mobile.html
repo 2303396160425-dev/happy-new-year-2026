@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+
+<!-- VERY IMPORTANT FOR MOBILE -->
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Happy New Year 🎉</title>
+
+<style>
+/* RESET */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* BODY */
+body {
+  min-height: 100vh;
+  background: linear-gradient(180deg, #000428, #004e92);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-family: Arial, Helvetica, sans-serif;
+  color: white;
+  text-align: center;
+  overflow: hidden;
+}
+
+/* MAIN CONTAINER */
+.container {
+  padding: 20px;
+  z-index: 2;
+}
+
+/* TEXT SIZES — MOBILE FIRST */
+h1 {
+  font-size: 2.2rem;
+  margin-bottom: 10px;
+  animation: glow 2s infinite alternate;
+}
+
+.year {
+  font-size: 3.8rem;
+  font-weight: bold;
+  color: gold;
+  margin: 10px 0;
+  animation: pulse 1.5s infinite;
+}
+
+p {
+  font-size: 1.1rem;
+  line-height: 1.5;
+}
+
+/* ANIMATIONS */
+@keyframes glow {
+  from { text-shadow: 0 0 10px gold; }
+  to { text-shadow: 0 0 25px orange; }
+}
+
+@keyframes pulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.12); }
+  100% { transform: scale(1); }
+}
+
+/* FIREWORK CANVAS */
+canvas {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+</style>
+</head>
+
+<body>
+
+<canvas id="fireworks"></canvas>
+
+<div class="container">
+  <h1>🎉 Happy New Year 🎉</h1>
+  <div class="year">2026</div>
+  <p>May this year bring happiness, success & good health ✨</p>
+  <p>— From <strong>Dewang</strong></p>
+</div>
+
+<script>
+const canvas = document.getElementById("fireworks");
+const ctx = canvas.getContext("2d");
+
+function resizeCanvas() {
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+}
+resizeCanvas();
+
+window.addEventListener("resize", resizeCanvas);
+
+let particles = [];
+
+function createFirework() {
+  const x = Math.random() * canvas.width;
+  const y = Math.random() * canvas.height * 0.5;
+  const colors = ["#ff5252", "#ffd740", "#40c4ff", "#ffffff"];
+
+  for (let i = 0; i < 60; i++) {
+    particles.push({
+      x,
+      y,
+      vx: (Math.random() - 0.5) * 5,
+      vy: (Math.random() - 0.5) * 5,
+      life: 80,
+      color: colors[Math.floor(Math.random() * colors.length)]
+    });
+  }
+}
+
+function animate() {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+  particles.forEach((p, i) => {
+    p.x += p.vx;
+    p.y += p.vy;
+    p.life--;
+
+    ctx.beginPath();
+    ctx.arc(p.x, p.y, 2, 0, Math.PI * 2);
+    ctx.fillStyle = p.color;
+    ctx.fill();
+
+    if (p.life <= 0) particles.splice(i, 1);
+  });
+
+  requestAnimationFrame(animate);
+}
+
+setInterval(createFirework, 900);
+animate();
+</script>
+
+</body>
+</html>
